@@ -1,8 +1,6 @@
 <?php
 
 use App\Models\Author;
-use App\Models\Book;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -11,17 +9,18 @@ Route::get('/', function () {
 
 Route::get('/tere', function () {
 
-    $book = Book::find(1);
+    $authors = Author::all();
 
-    $authorsBooks = Author::withCount('books')->get();
+    $authors->load('books.reviews', 'reviews');
 
-    $author = Author::find(1);
+    // $books = [];
 
-    $authorBooks = $author->books;
+    // foreach ($authors as $author) {
+    //     $books = array_merge($books, $author->books->toArray());
+    // }
 
-    $bookAuthor = $book->author;
+    return view('tere', [
+        'authors' => $authors,
+    ]);
 
-    $authorWithBooks = Author::with('books')->get();
-
-    return $authorWithBooks;
 });
